@@ -4,13 +4,10 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-4.0.xsd  
-
-
-http://www.springframework.org/schema/context  
+http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 	<!-- <context:annotation-config/> -->
 	<context:component-scan base-package="com.xiajiajia.dao" />
-
 	<bean id="filePath" class="java.lang.String">
 		<constructor-arg>
 			<value><![CDATA[
@@ -78,20 +75,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
-import com.markit.markitclear.util.test.ExceptionCatch;
-import com.markit.markitclear.util.test.CatchExceptionRule;
-import com.markit.markitclear.util.test.ServiceUtil;
-import static com.markit.markitclear.util.test.ServiceUtil.IDGEN_NUMBER;
-import static com.markit.markitclear.util.test.ServiceUtil.BUYER_OR_SELLER;
-import static com.markit.markitclear.util.test.ServiceUtil.EXCEPTION_ID;
-import static com.markit.markitclear.util.test.ServiceUtil.PARTY_ID;
-import static com.markit.markitclear.util.test.ServiceUtil.TICKET_ID;
-import static com.markit.markitclear.util.test.ServiceUtil.TRADE_ID;
-import static com.markit.markitclear.util.test.ServiceUtil.USER_LOGIN_EMAIL;
-import static com.markit.markitclear.util.test.ServiceUtil.initServiceWithFieldName;
-import static com.markit.markitclear.util.test.ServiceUtil.assertErrors;
-import static com.markit.markitclear.util.test.ServiceUtil.initServiceWithMockito;
-import com.markit.markitclear.actiontemplate.ActionResponse;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -100,7 +83,6 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import com.markit.markitclear.util.test.CatchExceptionRule;
 @RunWith(MockitoJUnitRunner.class)
 public class <Iclasstest> {
     @Rule

@@ -1,5 +1,13 @@
 package com.xiajiajia.check;
 
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.Statement;
+import com.xiajiajia.parseclass.GetAllMethod;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -14,17 +22,6 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.junit.Test;
-
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.Statement;
-import com.xiajiajia.parseclass.GetAllMethod;
 
 public class CheckWhileTrue {
     
@@ -42,10 +39,10 @@ public class CheckWhileTrue {
         return false;
     }
     
-    @Test
+
     public void testMethod() {
         System.out
-                .println(checkMehod("C:/code/project/activestream-loans/serializer/src/java/com/quartetfs/fin/loans/serializers/impl/CommitmentAdjustmentRequestSerializer.java"));
+                .println(checkMehod("C:/code/project/RequestSerializer.java"));
     }
     
     private boolean prtChild(List<Node> list, String rootMethodName,
@@ -168,7 +165,7 @@ public class CheckWhileTrue {
                 fileName -> fileName.endsWith(getFileNames(implClass)));
     }
     
-    @Test
+
     public void checkAllMethod() throws Exception {
         FileVisitorUtil f = new FileVisitorUtil();
         // Files.walkFileTree(Paths.get("C:\\code\\project\\dcl-app"), f);

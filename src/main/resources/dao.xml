@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-4.0.xsd  
-http://www.springframework.org/schema/mvc  
-http://www.springframework.org/schema/mvc/spring-mvc.xsd  
+
+
 http://www.springframework.org/schema/context  
 http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 	<!-- <context:annotation-config/> -->
@@ -15,11 +15,8 @@ http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 		<constructor-arg>
 			<value><![CDATA[
 
-F:\workspace\1\loans-workflow\impl\src\test\java\com\quartetfs\workflow\rules\test\PerformTradeCalculationsTest.java
+C:\x\a.java
 
- 
- 
- 
 ]]></value>
 		</constructor-arg>
 	</bean>
@@ -28,7 +25,7 @@ F:\workspace\1\loans-workflow\impl\src\test\java\com\quartetfs\workflow\rules\te
 		<constructor-arg>
 			<value><![CDATA[
  <import>
- private   class <IBuilder> {
+ public   class <IBuilder> {
      private  <Iclasstest>  <IclasstestLowerCase>;
      public <IBuilder>(){
            <IclasstestLowerCase> = new <Iclasstest>();
@@ -63,6 +60,8 @@ F:\workspace\1\loans-workflow\impl\src\test\java\com\quartetfs\workflow\rules\te
 <import>
 import static com.markit.markitclear.util.test.ServiceUtil.THROW_EXCEPTION;
 import org.junit.Test;
+import org.junit.Rule;
+import com.markit.markitclear.uiserver.JdbcUniqueIdGenerator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.AfterClass;
@@ -79,6 +78,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
+import com.markit.markitclear.util.test.ExceptionCatch;
+import com.markit.markitclear.util.test.CatchExceptionRule;
 import com.markit.markitclear.util.test.ServiceUtil;
 import static com.markit.markitclear.util.test.ServiceUtil.IDGEN_NUMBER;
 import static com.markit.markitclear.util.test.ServiceUtil.BUYER_OR_SELLER;
@@ -99,12 +100,16 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import com.markit.markitclear.util.test.CatchExceptionRule;
 @RunWith(MockitoJUnitRunner.class)
 public class <Iclasstest> {
+    @Rule
+    public CatchExceptionRule rule = new CatchExceptionRule();
+    
   <if(isComposer)>
     private static <Icontext>  executionContext;
-    
     private <Irequest> request;
+    <IFields>
     @Mock
     private JdbcUniqueIdGenerator                 idGen;
     @InjectMocks
@@ -126,37 +131,30 @@ public class <Iclasstest> {
     public  static void onceTearDown() {
         ServiceUtil.cleanObject(executionContext);
     }
-     @Test
-    public void shouldReturnRequestIsNull() {
-        try {
-            composer.compose(null, executionContext);
-            fail(THROW_EXCEPTION);
-        } catch (Exception e) {
-            assertEquals(e.getMessage(), "Request can not be null.");
-        }
-    }
+     
+    @ExceptionCatch(message = "", value = xxxx.class)
     @Test
+    public void shouldReturnRequestIsNull() {
+            composer.compose(null, executionContext);
+    }
+     @ExceptionCatch(message = "", value = xxxx.class)
+     @Test
     public void shouldReturnExecutionContextIsNull() {
-        try {
             composer.compose(request, null);
-            fail(THROW_EXCEPTION);
-        } catch (Exception e) {
-            assertEquals(e.getMessage(), "ExecutionContext can not be null.");
-        }
     } 
   <else>
     <IFields>
     @InjectMocks
     private <Iclass> validator = new <Iclass>();;
-    private static <Irequest> request;
+    private  <Irequest> request;
     private static ActionTemplateExecutionContext executionContext;
     @BeforeClass
     public static void beforeClassSetup() throws Exception {
-         request = new <Irequest>();
          executionContext = new ActionTemplateExecutionContext();
     }
     @Before
     public void beforeSetup() throws Exception {
+    request = new <Irequest>();
     }
     
     @After
@@ -164,7 +162,7 @@ public class <Iclasstest> {
     }
     @AfterClass
     public  static void afterClassSetup() {
-        ServiceUtil.cleanObject(request, executionContext);
+        ServiceUtil.cleanObject(executionContext);
     }
   <endif>
       <if(IvalidatorTestMethod)> 
@@ -211,15 +209,11 @@ public class <Iclasstest> {
 	<bean id="validatorMethodWithException" class="java.lang.String">
 		<constructor-arg>
 			<value><![CDATA[
-     @Test
+    @ExceptionCatch(message = "", value = xxxx.class)
+	@Test		
     public void <methodName>() {
         // <comment>
-          try {
-              ActionResponse ar = validator.validate(request, executionContext);
-              fail(THROW_EXCEPTION); 
-        } catch (Exception e) {
-            assertEquals(e.getMessage(), "");
-        }
+        validator.validate(request, executionContext);
     }
 			]]></value>
 		</constructor-arg>

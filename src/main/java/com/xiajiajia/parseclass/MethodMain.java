@@ -1,16 +1,16 @@
 package com.xiajiajia.parseclass;
 
+import static com.xiajiajia.parseclass.MethodUtil.getFilePath;
+import static com.xiajiajia.parseclass.MethodUtil.getResut;
+
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import static com.xiajiajia.parseclass.MethodUtil.getFilePath ;
-import static com.xiajiajia.parseclass.MethodUtil.getResut ;
 public class MethodMain {
+    
     public static void main(String[] args) throws Exception {
         Path path = getFilePath();
         if (Files.isDirectory(path)) {

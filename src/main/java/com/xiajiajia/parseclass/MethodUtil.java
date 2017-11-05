@@ -1,28 +1,5 @@
 package com.xiajiajia.parseclass;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Modifier;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import org.junit.Test;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.util.StringUtils;
-import org.stringtemplate.v4.ST;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.PackageDeclaration;
@@ -33,10 +10,33 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.google.common.base.Strings;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Modifier;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import org.junit.Test;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+import org.stringtemplate.v4.ST;
 
 public class MethodUtil {
     private static String                  className;
-    public final static String            filePathID                     = "filePath";
+    public final static String             filePathID                     = "filePath";
     private final static String            unitTestTemplateID             = "unitTestTemplate";
     private final static String            validatorMethodID              = "validatorMethod";
     private final static String            validatorMethodWithExceptionID = "validatorMethodWithException";
@@ -44,14 +44,17 @@ public class MethodUtil {
     private final static String            regException                   = "throw\\s*new\\s*\\w+\\s*\\(.*?\\)?;";
     private final static String            regaddResponse                 = "addResponse\\(.*?\\)?;";
     private final static String            testAnnotation                 = "@Test";
+    private final static String            exceptionAnnotation            = "@ExceptionCatch";
     private final static String            PUBLIC_CLASS                   = "public class";
     private static List<ImportDeclaration> importsLists;
     private static List<String>            importsClasses                 = new ArrayList<>();
     private static String                  resultStr;
-    private static final int               VOID_LEN                       = "void"
-            .length();
+
+    private static final String            PUBLIC_STR                      = "public";
+    private static final String            VOID_STR                      = "void";
+    private static final int               VOID_LEN                       = VOID_STR.length();
     private static StringBuilder           fields                         = new StringBuilder();
-                                                                          
+    
     private MethodUtil() {
     }
     
@@ -63,16 +66,15 @@ public class MethodUtil {
         return ctx.getBean(beanName, String.class).trim();
     }
     
-    public static InputStream getFileInputStream()
-            throws BeansException, IOException {
-        return Files.newInputStream(
-                Paths.get(ctx.getBean(filePathID, String.class).trim()));
+    public static InputStream getFileInputStream() throws BeansException,
+            IOException {
+        return Files.newInputStream(Paths.get(ctx.getBean(filePathID,
+                String.class).trim()));
     }
     
     public static Path getFilePath() throws BeansException, IOException {
         return Paths.get(ctx.getBean(filePathID, String.class).trim());
     }
-    
     
     public static String getResut(Path path) {
         try {
@@ -87,41 +89,62 @@ public class MethodUtil {
     }
     
     public static String printUnitMethod(List<String> list) throws Exception {
+        if(CollectionUtils.isEmpty(list)){
+            return "";
+        }
         final int len = list.size();
         StringBuilder resultAll = new StringBuilder();
-        final String classNameTemp = list.stream()
-                .filter(v -> v.contains(PUBLIC_CLASS)).map(name -> {
-                    return name
-                            .substring(
-                                    name.lastIndexOf(PUBLIC_CLASS)
-                                            + PUBLIC_CLASS.length(),
-                                    name.indexOf("{"))
-                            .trim() + " ";
-                            
-                }).findFirst().get();
+//        final String classNameTemp = list.stream()
+//                .filter(v -> v.contains(PUBLIC_CLASS)).map(name -> {
+//                    return name
+//                            .substring(
+//                                    name.lastIndexOf(PUBLIC_CLASS)
+//                                            + PUBLIC_CLASS.length(),
+//                                    name.indexOf("{"))
+//                            .trim() + " ";
+//                            
+//                }).findFirst().ofNullable("").get();
         int count = 0;
         for (int i = 0; i < len; i++) {
             if (list.get(i).contains(testAnnotation)) {
-                count++;
               // System.out.println(classNameTemp);
                 if (i + 1 < len) {
+                    count++;
                     String uniteMethod = list.get(i + 1);
-                    resultAll.append("\n")
-                            .append(uniteMethod.substring(
-                                    uniteMethod.lastIndexOf("void") + VOID_LEN,
-                                    uniteMethod.indexOf("(")).trim());
-                                    
+                    if(uniteMethod.contains( VOID_STR )&&uniteMethod.contains(PUBLIC_STR)){
+                        resultAll 
+                        .append(uniteMethod.substring(
+                                uniteMethod.lastIndexOf("void") + VOID_LEN,
+                                uniteMethod.indexOf("(")).trim()).append("\n");   
+                    }
                 }
                 
             }
         }
         System.out.println(resultAll.toString());
-        return count + " tests";
+        return "Total "+count;
     }
-    
     private static final List<String> unneedFieldType = new ArrayList<String>(
-            Arrays.asList("Logger", "String"));
-            
+                                                              Arrays.asList(
+                                                                      "byte",
+                                                                      "Byte",
+                                                                      "short",
+                                                                      "Short",
+                                                                      "long",
+                                                                      "Long",
+                                                                      "int",
+                                                                      "Integer",
+                                                                      "float",
+                                                                      "Float",
+                                                                      "boolean",
+                                                                      "Boolean",
+                                                                      "Boolean",
+                                                                      "double",
+                                                                      "Double",
+                                                                      "Logger",
+                                                                      "char",
+                                                                      "String"));
+    
     public static void mockField(CompilationUnit cu) {
         List<FieldDeclaration> fieldDeclarationList = getAllVariables(cu);
         for (FieldDeclaration myType : fieldDeclarationList) {
@@ -129,7 +152,7 @@ public class MethodUtil {
             String fileType = myType.getType().toString();
             if (!unneedFieldType.contains(fileType)) {
                 fields.append("@Mock\n");
-                fields.append(fileType + "   " + myFields.get(0) + ";\n");
+                fields.append("private "+fileType + "   " + myFields.get(0) + ";\n");
             }
         }
     }
@@ -184,8 +207,9 @@ public class MethodUtil {
         st.add("Iclasstest", className);
         st.add("IFieldsAll", fieldsAll);
         st.add("IclasstestLowerCase", firstLetterLowercase(className));
-        st.add("IBuilderMethod", createBuilderMethod(fieldList,
-                className + "Builder", firstLetterLowercase(className)));
+        st.add("IBuilderMethod",
+                createBuilderMethod(fieldList, className + "Builder",
+                        firstLetterLowercase(className)));
         System.out.println(st.render());
     }
     
@@ -213,12 +237,18 @@ public class MethodUtil {
     public static List<String> getImports(CompilationUnit cu) {
         List<TypeDeclaration> typeList = cu.getTypes();
         importsLists = cu.getImports();
-        if (null != importsLists) {
+
+        if (!CollectionUtils.isEmpty(importsLists)) {
             importsClasses = importsLists.stream().map(v -> {
                 return "import " + v.getName().toString() + ";\n";
             }).collect(Collectors.toList());
+        }else{
+            return Collections.emptyList();
         }
         PackageDeclaration packagesPaths = cu.getPackage();
+        if(null==packagesPaths){
+            return importsClasses;
+        }
         importsClasses.add("import " + packagesPaths.getName().toString() + "."
                 + getClassName(cu) + ";\n");
         return importsClasses;
@@ -262,8 +292,7 @@ public class MethodUtil {
         System.out.println(a <= 'z');
     }
     
-    private static String generateMethodNameByErrorMessage(
-            String errorMessage) {
+    private static String generateMethodNameByErrorMessage(String errorMessage) {
         String reg = "\\\".+\\\"";
         Pattern pattern = Pattern.compile(reg, Pattern.DOTALL);
         Matcher m = pattern.matcher(errorMessage);
@@ -303,8 +332,8 @@ public class MethodUtil {
         return "";
     }
     
-    private static String getTestMethod(String x)
-            throws IOException, URISyntaxException {
+    private static String getTestMethod(String x) throws IOException,
+            URISyntaxException {
         x = x.replace("n't", "nnot");
         StringBuilder ivalidatorTestMethod = new StringBuilder("");
         String reg = "if\\s*\\(.*?\\)\\s*\\{.*?(throw new|addResponse).*?;\\s*\\}";
@@ -317,8 +346,8 @@ public class MethodUtil {
                 ivalidatorTestMethod.append("\n");
                 ivalidatorTestMethod
                         .append(getErrorMessage(value, regException));
-                ivalidatorTestMethod
-                        .append(getErrorMessage(value, regaddResponse));
+                ivalidatorTestMethod.append(getErrorMessage(value,
+                        regaddResponse));
                 ivalidatorTestMethod.append("\n");
             }
             result = m.find();
@@ -339,18 +368,18 @@ public class MethodUtil {
             }
             else {
                 try {
-                    template.add("IvalidatorTestMethod",
-                            getTestMethod(n.getParentNode().toString()));
+                    template.add("IvalidatorTestMethod", getTestMethod(n
+                            .getParentNode().toString()));
                 } catch (IOException | URISyntaxException e) {
                     e.printStackTrace();
                 }
                 // template.add("IEXTENDS", validateParentClass);
             }
             try {
-                template.add("Irequest",
-                        parameterList.get(0).getType().toString());
-                template.add("Icontext",
-                        parameterList.get(1).getType().toString());
+                template.add("Irequest", parameterList.get(0).getType()
+                        .toString());
+                template.add("Icontext", parameterList.get(1).getType()
+                        .toString());
             } catch (IndexOutOfBoundsException e) {
                 e.printStackTrace();
             }
@@ -371,11 +400,12 @@ public class MethodUtil {
     }
     
     static Predicate<MethodDeclaration> isCompose  = method -> method.getName()
-            .equals("compose");
-            
+                                                           .equals("compose");
+    
     static Predicate<MethodDeclaration> isValidate = method -> method.getName()
-            .endsWith("_validate");
-            
+                                                           .endsWith(
+                                                                   "_validate");
+    
     private static void methodVisitor(GetAllMethod get) {
         Set<MethodDeclaration> methodSet = get.getAllMethod();
         for (Object o : methodSet) {

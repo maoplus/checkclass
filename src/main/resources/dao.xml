@@ -55,10 +55,8 @@ C:\x\a.java
 		<constructor-arg>
 			<value><![CDATA[
 <import>
-import static com.markit.markitclear.util.test.ServiceUtil.THROW_EXCEPTION;
 import org.junit.Test;
 import org.junit.Rule;
-import com.markit.markitclear.uiserver.JdbcUniqueIdGenerator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.AfterClass;

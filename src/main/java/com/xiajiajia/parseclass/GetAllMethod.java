@@ -3,6 +3,7 @@ package com.xiajiajia.parseclass;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import java.io.IOException;
@@ -15,8 +16,9 @@ import java.util.Set;
 public class GetAllMethod extends VoidVisitorAdapter {
     private CompilationUnit        cu;
                                    
-    private Set<MethodDeclaration> allEmement = new HashSet<>();
-                                              
+    private Set<MethodDeclaration> allMethodEmement = new HashSet<>();
+    private Set<FieldDeclaration> allFieldEmement = new HashSet<>();
+
     public GetAllMethod(InputStream in) throws Exception
     
     {
@@ -45,11 +47,21 @@ public class GetAllMethod extends VoidVisitorAdapter {
     
     public Set<MethodDeclaration> getAllMethod() {
         this.visit(cu, null);
-        return allEmement;
+        return allMethodEmement;
     }
-    
+
+    public Set<FieldDeclaration> getAllField() {
+        this.visit(cu, null);
+        return allFieldEmement;
+    }
+
     @Override
     public void visit(MethodDeclaration n, Object arg) {
-        allEmement.add(n);
+        allMethodEmement.add(n);
+    }
+
+    @Override
+    public void visit(FieldDeclaration n, Object arg) {
+        allFieldEmement.add(n);
     }
 }

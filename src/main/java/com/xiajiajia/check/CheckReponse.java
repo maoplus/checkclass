@@ -18,7 +18,7 @@ public class CheckReponse {
 
   public static void main(String[] args) throws Exception {
     Path p = Paths
-        .get("C:\\awork\\p2p\\p2p-facade\\src\\main\\java\\com\\haier\\hairy\\p2p\\facade");
+        .get("C:\\awork\\lanmao\\hry-lanmao-facade\\src\\main\\java\\com\\haier\\hairy\\lanmao\\facade");
     // 1.遍历包下面所有的文件
     Files.list(p).filter(path -> {
       return !Files.isDirectory(path);

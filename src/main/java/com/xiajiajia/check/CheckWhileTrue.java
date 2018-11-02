@@ -56,8 +56,8 @@ public class CheckWhileTrue {
                         .contains("." + rootMethodName)) {
                     continue;
                 }
-                String methodNameTemp = methodCall.getName();
-                List<Expression> listArgs = methodCall.getArgs();
+                String methodNameTemp = methodCall.getName().asString();
+                List<Expression> listArgs = methodCall.getArguments();
                 final int argsCount = null == listArgs ? 0 : listArgs.size();
                 if (methodNameTemp.equals(rootMethodName)
                         && argsCount == paramterCount) {
@@ -65,7 +65,7 @@ public class CheckWhileTrue {
                     return true;
                 }
             }
-            isRecursive = prtChild(n.getChildrenNodes(), rootMethodName,
+            isRecursive = prtChild(n.getChildNodes(), rootMethodName,
                     paramterCount);
             if (isRecursive) {
                 return true;
@@ -75,22 +75,22 @@ public class CheckWhileTrue {
     }
     
     private boolean isRecursive(MethodDeclaration method) {
-        final String methodName = method.getName();
+        final String methodName = method.getName().asString();
         List<Parameter> list = method.getParameters();
         final int paramterCount = null == list ? 0 : list.size();
-        BlockStmt body = method.getBody();
+        BlockStmt body = method.getBody().get();
         if (null == body) {
             return false;
         }
-        if (null == body.getStmts()) {
+        if (null == body.getStatements()) {
             return false;
         }
-        for (Statement state : body.getStmts()) {
+        for (Statement state : body.getStatements()) {
             if (null == state) {
                 continue;
             }
             if (state.toString().contains(methodName)) {
-                if (prtChild(state.getChildrenNodes(), methodName,
+                if (prtChild(state.getChildNodes(), methodName,
                         paramterCount)) {
                     return true;
                 }

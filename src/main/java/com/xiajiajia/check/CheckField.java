@@ -2,9 +2,8 @@ package com.xiajiajia.check;
 
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.metamodel.FieldDeclarationMetaModel;
 import com.xiajiajia.parseclass.GetAllMethod;
-
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.List;
@@ -42,9 +41,8 @@ public class CheckField {
     }
 
     private static boolean hasSpecificAnnotation(final FieldDeclaration fieldDeclaration) {
-
-        Type type = fieldDeclaration.getType();
-        if (!CHECK_TYPE.equalsIgnoreCase(type.toString())) {
+        FieldDeclarationMetaModel fieldDeclarationMetaModel = fieldDeclaration.getMetaModel();
+        if (!CHECK_TYPE.equalsIgnoreCase(fieldDeclarationMetaModel.getTypeName())) {
             return false;
         }
         List<AnnotationExpr> annotationExprList = fieldDeclaration.getAnnotations();

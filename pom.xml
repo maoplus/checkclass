@@ -15,51 +15,24 @@
 		<aspectjVersion>1.6.8.RELEASE</aspectjVersion>
 		<parserVersion>2.2.1</parserVersion>
 		<stringTemplateVersion>4.0.2</stringTemplateVersion>
-		<guavaVersion>14.0.1</guavaVersion>
+		<guavaVersion>23.0</guavaVersion>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.github.javaparser</groupId>
-			<artifactId>javaparser-core</artifactId>
-			<version>${parserVersion}</version>
-		</dependency>
-		<!-- Spring -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${springVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-			<version>${springVersion}</version>
-			<type>jar</type>
-			<scope>compile</scope>
+			<artifactId>javaparser-symbol-solver-core</artifactId>
+			<version>3.7.0</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junitVersion}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.antlr</groupId>
-			<artifactId>stringtemplate</artifactId>
-			<version>${stringTemplateVersion}</version>
-		</dependency>
+
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>${guavaVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${springVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy</artifactId>
-            <version>2.4.6</version>
 		</dependency>
 	</dependencies>
 	<build>
